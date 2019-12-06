@@ -1,0 +1,203 @@
+package com.smarthome.main.processthread;
+
+import android.media.MediaPlayer;
+import android.os.Handler;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.SeekBar;
+import android.widget.TextView;
+
+import com.bkav.sync.interfaces.ApplicationService;
+import com.smarthome.main.R;
+import com.smarthome.old.MainActivity;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+
+public class MusicAnhngn extends AppCompatActivity {
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+        setContentView(R.layout.activity_music_anhngn);
+
+        AnhXa();
+
+        AddSong();
+
+        CreateMedia();
+
+        buttonHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ApplicationService.vibrateSoundService.vibrate();
+                onBackPressed();
+            }
+        });
+
+        buttonPlay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(mediaPlayer.isPlaying()){
+                    mediaPlayer.pause();
+                    buttonPlay.setImageResource(R.drawable.playanhngn);
+                }
+                else{
+                    buttonPlay.setImageResource(R.drawable.pauseanhngn);
+                    mediaPlayer.start();
+                }
+                UpdateRunTimeMusic();
+            }
+        });
+
+        buttonBackwards.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                buttonPlay.setImageResource(R.drawable.pauseanhngn);
+                mediaPlayer.stop();
+                if(poison == 0){
+                    poison = listSongAnhngn.size() - 1;
+                    CreateMedia();
+                    mediaPlayer.start();
+                }
+                else {
+                    poison--;
+                    CreateMedia();
+                    mediaPlayer.start();
+                }
+                UpdateRunTimeMusic();
+            }
+        });
+
+        buttonForwards.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                buttonPlay.setImageResource(R.drawable.pauseanhngn);
+                mediaPlayer.stop();
+                if(poison == listSongAnhngn.size() - 1){
+                    poison = 0;
+                    CreateMedia();
+                    mediaPlayer.start();
+                }
+                else {
+                    poison++;
+                    CreateMedia();
+                    mediaPlayer.start();
+                }
+                UpdateRunTimeMusic();
+            }
+        });
+
+        seekBarRunMusic.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                mediaPlayer.seekTo(seekBarRunMusic.getProgress());
+            }
+        });
+
+    }
+    private TextView                textViewMusicTimeRunning;
+    private TextView                textViewMusicTimeMax;
+    private TextView                textViewNameSongRunning;
+    private ImageView               buttonHome;
+    private ImageButton             buttonPlay;
+    private ImageButton             buttonBackwards;
+    private ImageButton             buttonForwards;
+    private ImageButton             buttonLoop;
+    private SeekBar                 seekBarVolume;
+    private SeekBar                 seekBarRunMusic;
+    private MediaPlayer             mediaPlayer;
+    private ArrayList<SongAnhNgN>   listSongAnhngn;
+    private int                     poison = 0;
+    private void                    CreateMedia(){
+        mediaPlayer = MediaPlayer.create
+                (MusicAnhngn.this, listSongAnhngn.get(poison).getFileSong());
+        textViewNameSongRunning.setText(listSongAnhngn.get(poison).getNameSong());
+        SetTimeTotal();
+    }
+    private void                    AnhXa(){
+        this.textViewMusicTimeRunning   =findViewById(R.id.text_view_music_time_running);
+        this.textViewMusicTimeMax       =findViewById(R.id.text_view_music_time_max);
+        this.textViewNameSongRunning    = findViewById(R.id.text_view_name_song_running);
+        this.buttonHome                 = findViewById(R.id.homeIcon);
+        this.buttonPlay                 = findViewById(R.id.image_button_play);
+        this.buttonBackwards            = findViewById(R.id.image_button_backward);
+        this.buttonForwards             = findViewById(R.id.image_button_forwards);
+        this.buttonLoop                 = findViewById(R.id.image_button_loop);
+        this.seekBarVolume              = findViewById(R.id.seebar_volume);
+        this.seekBarRunMusic            = findViewById(R.id.seebar_run_music);
+    }
+    private void                    AddSong() {
+        listSongAnhngn = new ArrayList<>();
+        listSongAnhngn.add(new SongAnhNgN("Giả vờ yêu", R.raw.giavoyeu));
+        listSongAnhngn.add(new SongAnhNgN("Vầng trăng khuyết", R.raw.vangtrangkhuyet));
+        listSongAnhngn.add(new SongAnhNgN("Hai cộng một bằng không", R.raw.haicongmotbangkhong));
+    }
+    private void                    SetTimeTotal(){
+        SimpleDateFormat formatMusicTimeMax = new SimpleDateFormat("mm:ss");
+        textViewMusicTimeMax.setText(formatMusicTimeMax.format(mediaPlayer.getDuration()));
+        seekBarRunMusic.setMax(mediaPlayer.getDuration());
+    }
+    private void                    UpdateRunTimeMusic(){
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                SimpleDateFormat formatMusicTimeRunning = new SimpleDateFormat("mm:ss");
+                textViewMusicTimeRunning.setText(formatMusicTimeRunning.format(mediaPlayer.getCurrentPosition()));
+                seekBarRunMusic.setProgress(mediaPlayer.getCurrentPosition());
+
+                mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    @Override
+                    public void onCompletion(MediaPlayer mp) {
+                        poison++;
+                        if(poison > listSongAnhngn.size() - 1){
+                            poison = 0;
+                            mediaPlayer = MediaPlayer.create
+                                    (MusicAnhngn.this, listSongAnhngn.get(poison).getFileSong());
+                            textViewNameSongRunning.setText(listSongAnhngn.get(poison).getNameSong());
+                            SetTimeTotal();
+                            mediaPlayer.start();
+                        }
+                        else {
+                            mediaPlayer = MediaPlayer.create
+                                    (MusicAnhngn.this, listSongAnhngn.get(poison).getFileSong());
+                            textViewNameSongRunning.setText(listSongAnhngn.get(poison).getNameSong());
+                            SetTimeTotal();
+                            mediaPlayer.start();
+                        }
+                        UpdateRunTimeMusic();
+                    }
+                });
+
+
+                handler.postDelayed(this, 500);
+            }
+        }, 100);
+
+
+
+    }
+
+}
