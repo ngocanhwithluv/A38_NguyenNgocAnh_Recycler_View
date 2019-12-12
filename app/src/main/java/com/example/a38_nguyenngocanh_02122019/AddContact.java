@@ -2,6 +2,7 @@ package com.example.a38_nguyenngocanh_02122019;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,21 +31,19 @@ public class AddContact extends AppCompatActivity {
             }
         });
 
-        if(name.getText().toString().isEmpty() ) {
+        if(number.getText().toString().isEmpty() ) {
             complete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-                    Intent intent = new Intent(AddContact.this, MainActivity.class);
-//                    Contact contact = new Contact(name.getText().toString(),
-//                            number.getText().toString(),
-//                            address.getText().toString(),
-//                            R.drawable.assistance);
-
-                    Contact contact = new Contact("nne", "222", "ha noi", R.drawable.assistance);
-                    intent.putExtra("newContact",  contact);
-                    startActivity(intent);
-//                    onBackPressed();
+                    Intent returnIntent = new Intent();
+                    Contact newContact = new Contact(
+                            name.getText().toString(),
+                            number.getText().toString(),
+                            address.getText().toString(),
+                            R.drawable.assistance);
+                    returnIntent.putExtra("newContact", newContact);
+                    setResult(Activity.RESULT_OK, returnIntent);
+                    finish();
                 }
             });
         }
@@ -53,7 +52,7 @@ public class AddContact extends AppCompatActivity {
     private void AnhXa(){
         name = findViewById(R.id.edit_text_name_add_contact);
         number = findViewById(R.id.edit_text_number_add_contact);
-        address = findViewById(R.id.edit_text_number_add_contact);
+        address = findViewById(R.id.edit_text_address_add_contact);
         cancel = findViewById(R.id.text_view_cancel_add_contact);
         complete = findViewById(R.id.text_view_complete_add_contact);
     }

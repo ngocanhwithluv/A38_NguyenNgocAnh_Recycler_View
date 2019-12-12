@@ -7,7 +7,7 @@
     <TextView
         android:layout_marginTop="10dp"
         android:layout_marginLeft="20dp"
-        android:id="@+id/text_view_cancel_add_contact"
+        android:id="@+id/text_view_cancel_edit_contact"
         android:text="Hủy"
         android:textSize="20dp"
         android:textColor="#000000"
@@ -16,8 +16,8 @@
     <TextView
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
-        android:id="@+id/text_view_cancel_new_contact"
-        android:text="Liên hệ Mới"
+        android:id="@+id/text_view_edit_contact"
+        android:text="Sửa liên hệ"
         android:textStyle="bold"
         android:textSize="20dp"
         android:textColor="#000000"
@@ -27,7 +27,7 @@
         android:layout_alignParentRight="true"
         android:layout_marginRight="20dp"
         android:layout_marginTop="10dp"
-        android:id="@+id/text_view_complete_add_contact"
+        android:id="@+id/text_view_complete_edit_contact"
         android:hint="Xong"
         android:textStyle="bold"
         android:textSize="20dp"
@@ -35,11 +35,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
     <ImageView
-        android:id="@+id/image_view_add_contact"
+        android:id="@+id/image_view_edit_contact"
         android:padding="10dp"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_below="@id/text_view_cancel_add_contact"
+        android:layout_below="@id/text_view_cancel_edit_contact"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="40dp"
         android:src="@drawable/assistance"
@@ -51,27 +51,27 @@
         android:layout_marginTop="60dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/edit_text_name_add_contact"
-        android:layout_toRightOf="@+id/image_view_add_contact"
-        android:layout_below="@+id/text_view_cancel_add_contact"/>
+        android:id="@+id/edit_text_name_edit_contact"
+        android:layout_toRightOf="@+id/image_view_edit_contact"
+        android:layout_below="@+id/text_view_cancel_edit_contact"/>
     <EditText
         android:textSize="20dp"
         android:hint="Số điện thoại"
         android:layout_marginLeft="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/edit_text_number_add_contact"
-        android:layout_toRightOf="@+id/image_view_add_contact"
-        android:layout_below="@+id/edit_text_name_add_contact"/>
+        android:id="@+id/edit_text_number_edit_contact"
+        android:layout_toRightOf="@+id/image_view_edit_contact"
+        android:layout_below="@+id/edit_text_name_edit_contact"/>
     <EditText
         android:textSize="20dp"
         android:hint="Địa chỉ"
         android:layout_marginLeft="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/edit_text_address_add_contact"
-        android:layout_toRightOf="@+id/image_view_add_contact"
-        android:layout_below="@+id/edit_text_number_add_contact"/>
+        android:id="@+id/edit_text_address_edit_contact"
+        android:layout_toRightOf="@+id/image_view_edit_contact"
+        android:layout_below="@+id/edit_text_number_edit_contact"/>
 
 
 
